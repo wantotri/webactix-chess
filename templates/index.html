@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-md p-2 p-md-0">
+  <section id="chess-section">
+    <div class="container">
+      <div class="d-flex justify-content-between">
+        <h1 class="my-4 h3">
+          <i class="fas fa-chess"></i> Chess Game
+        </h1>
+        <div class="d-flex align-items-center">
+          <a href="/game/{{game_id}}" class="btn btn-small btn-outline-success">
+            Create New Game
+          </a>
+        </div>
+      </div>
+
+      <span id="game-id" class="d-none">{{game_id}}</span>
+
+      <form class="join-form row g-3">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Game ID" id="input-game-id">
+          <button class="btn btn-outline-primary" type="button" id="button-join">
+            Join Game
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </section>
+</div>
+{% endblock content %}
+
+{% block extra_scripts %}
+<script src="/static/index.js"></script>
+{% endblock extra_scripts %}

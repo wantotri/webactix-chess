@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-md p-2 p-md-0">
+  <section id="chess-section">
+    <h1 class="my-4 h3">
+      <i class="fas fa-chess"></i> Chess Game
+    </h1>
+    <h5 id="game-id">{{ game_id }}</h5>
+    <div class="game-container">
+      <div class="board-container">
+        <div id="chess-captured-white" class="chess-captured-container"></div>
+        <div id="chess-game"></div>
+        <div id="chess-captured-black" class="chess-captured-container"></div>
+      </div>
+      <div class="log-container">
+        <h5>Status</h5>
+        <div class="status-container" id="chess-status-container">White Turn</div>
+        <h5>Moves History</h5>
+        <div class="history-container" id="chess-move-history"></div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock content %}
+
+{% block extra_scripts %}
+{# <script src="/static/chess.bundle.js"></script> #}
+<script src="/static/game.js"></script>
+{% endblock extra_scripts %}

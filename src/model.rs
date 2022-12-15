@@ -43,41 +43,6 @@ impl Winner {
     }
 }
 
-// #[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
-// pub struct Games {
-//     pub id: u16,
-//     pub player_white: String,
-//     pub player_black: String,
-//     pub status: Status,
-//     pub board: Board<Piece>,
-//     pub winner: Winner
-// }
-
-// impl Games {
-//     /// Create new game
-//     pub fn new(latest_id: u16, player_name: String) -> Games {
-//         Games {
-//             id: latest_id + 1,
-//             player_white: player_name,
-//             player_black: String::new(),
-//             status: Status::Waiting,
-//             board: Board::new(),
-//             winner: Winner::NotDecided
-//         }
-//     }
-// }
-
-// #[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
-// pub struct CreateNewGame {
-//     pub player_name: String,
-// }
-
-// #[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
-// pub struct JoinGame {
-//     pub game_id: f32,
-//     pub player_name: String,
-// }
-
 /// Player's Color: `White` or `Black`
 #[derive(Debug, PartialEq, Eq, Hash)]
 pub enum Color {

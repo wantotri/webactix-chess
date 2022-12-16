@@ -9,6 +9,7 @@ let color = "";
 let chess = {
   board: [],
   turn: 0,
+  status: '',
   history: [],
   captured_black: [],
   captured_white: [],
@@ -56,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ws.send("\\get_color");
     ws.send("\\get_game_stat");
     ws.send("\\get_board");
+    ws.send("\\get_status");
   };
 
   ws.onmessage = (event) => {
@@ -77,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } else if (msg.startsWith("game stat")) {
       let gameStatus = msg.split("\n")[0].split(": ")[1];
+      gameState.status = gameStatus;
       if (gameStatus == "game over") { gameState.gameOver = true }
 
       let stat = msg.split("\n").splice(1);
@@ -93,6 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
           historyContainer.append(pieceMove);
         })
       }
+
+    } else if (msg.startsWith("status:")) {
+      let status = msg.split(": ")[1];
+      gameState.status = status;
+      updateStatus()
 
     } else if (msg.startsWith("color:")) {
         color = msg.split(": ")[1];
@@ -202,11 +210,16 @@ function renderBoard(data) {
  */
 function updateStatus() {
   let statusContainer = document.getElementById("chess-status-container");
+  let statusText = "";
+
   if (gameState.gameOver) {
-    statusContainer.innerText = "Game Over"
+    statusText = "Game Over"
   } else {
-    statusContainer.innerText = ((gameState.turn % 2) == 0) ? "Black Turn" : "White Turn";
+    statusText = ((gameState.turn % 2) == 0) ? "Black Turn" : "White Turn";
   }
+
+  if (gameState.status == "waiting") statusText += " (Waiting Other Player)";
+  statusContainer.innerText = statusText;
 }
 
 /**

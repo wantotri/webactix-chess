@@ -25,6 +25,7 @@ impl Default for Lobby {
 }
 
 impl Lobby {
+    /// Send message to an actor given the Uuid
     fn send_message(&self, message: &str, id_to: &Uuid) {
         if let Some(socket_recipient) = self.sessions.get(id_to) {
             let _ = socket_recipient.do_send(WsMessage(message.to_owned()));
@@ -91,8 +92,10 @@ impl Handler<Disconnect> for Lobby {
             if total_players == 1 {
                 game.players
                     .iter()
-                    .for_each(|p| self.send_message(&format!("{} disconnected.", msg.id), p.0))
-
+                    .for_each(|p| { 
+                        self.send_message(&format!("{} disconnected.", msg.id), p.0);
+                        self.send_message(&format!("status: {}", game.status.as_str()), p.0);
+                    });
             } else if total_players == 0 {
                 self.rooms.remove(&msg.room_id);
             }
@@ -148,6 +151,13 @@ impl Handler<ClientActorMessage> for Lobby {
             let board = self.rooms.get(&msg.room_id).unwrap().board.to_string();
             let output = format!("board:\n{}", board);
             self.send_message(&output, &msg.id);
+
+        } else if msg.msg.starts_with("\\get_status") {
+            let status = self.rooms.get(&msg.room_id).unwrap().status.as_str();
+            let output = format!("status: {}", status);
+            for (pid, _color) in self.rooms.get(&msg.room_id).unwrap().players.iter() {
+                self.send_message(&output, pid);
+            }
 
         } else if msg.msg.starts_with("\\move")
         && self.rooms.get(&msg.room_id).unwrap().status == Status::Playing {

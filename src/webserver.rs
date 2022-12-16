@@ -4,6 +4,7 @@ use actix_web::{get, HttpRequest, HttpResponse, Responder, web};
 use uuid::Uuid;
 use tera::{Tera, Context};
 
+/// Handler for home (root) page
 #[get("/")]
 async fn index(template: web::Data<Tera>) -> impl Responder {
     let mut ctx = Context::new();
@@ -12,6 +13,7 @@ async fn index(template: web::Data<Tera>) -> impl Responder {
     HttpResponse::Ok().body(rendered)
 }
 
+/// Handler for page game
 #[get("/game/{game_id}")]
 async fn game(game_id: web::Path<Uuid>, template: web::Data<Tera>) -> impl Responder {
     let mut ctx = Context::new();

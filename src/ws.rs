@@ -25,6 +25,7 @@ pub struct ChessWebSocket {
 }
 
 impl ChessWebSocket {
+    /// Create new Chess Websocket instance
     pub fn new(room: Uuid, lobby: Addr<Lobby>) -> ChessWebSocket {
         ChessWebSocket {
             id: Uuid::new_v4(),
@@ -68,6 +69,7 @@ impl Actor for ChessWebSocket {
 }
 
 impl ChessWebSocket {
+    /// Heartbeat for checking the websocket connection
     fn hb(&self, ctx: &mut ws::WebsocketContext<Self>) {
         ctx.run_interval(HEARTBEAT_INTERVAL, |act, ctx| {
             if Instant::now().duration_since(act.hb) > CLIENT_TIMEOUT {
@@ -118,6 +120,7 @@ impl Handler<WsMessage> for ChessWebSocket {
     }
 }
 
+/// Start the websocket connection
 #[get("/ws/{room_id}")]
 pub async fn start_connection(
     req: HttpRequest,

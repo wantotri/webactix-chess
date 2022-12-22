@@ -437,9 +437,9 @@ impl Board<Piece> {
 
         let (start, end, wr, wk, br, bk);
         if king_col < rook_col {
-            (start, end, wr, wk, br, bk) = (king_col + 1, rook_col, "f1", "g1", "f8", "g8");
+            (start, end, wr, wk, br, bk) = (king_col, rook_col, "f1", "g1", "f8", "g8");
         } else {
-            (start, end, wr, wk, br, bk) = (rook_col + 1, king_col, "d1", "c1", "d8", "c8");
+            (start, end, wr, wk, br, bk) = (rook_col, king_col, "d1", "c1", "d8", "c8");
         }
 
         let paz = self.get_possible_attack_by_color(enemy_color)?;

@@ -92,7 +92,7 @@ impl Handler<Disconnect> for Lobby {
             if total_players == 1 {
                 game.players
                     .iter()
-                    .for_each(|p| { 
+                    .for_each(|p| {
                         self.send_message(&format!("{} disconnected.", msg.id), p.0);
                         self.send_message(&format!("status: {}", game.status.as_str()), p.0);
                     });
@@ -261,7 +261,9 @@ impl Handler<ClientActorMessage> for Lobby {
                 .collect::<Vec<String>>()
                 .join(" ");
             let message = format!("captured_{}: {}", cmd[1], captured);
-            self.send_message(&message, &msg.id);
+            for (pid, _color) in self.rooms.get(&msg.room_id).unwrap().players.iter() {
+                self.send_message(&message, pid);
+            }
 
         } else {
             let game = self.rooms.get(&msg.room_id).unwrap();

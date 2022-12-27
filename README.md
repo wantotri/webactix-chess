@@ -85,6 +85,22 @@ Multi-player Chess Game created using Rust Actix Web
     sudo systemctl enable webactix-chess
     ```
 
+## HTTPS
+
+1. Install certbot and nginx-plugin
+    ```bash
+    sudo apt install certbot python3-certbot-nginx
+    ```
+
+2. Obtaining an SSL Certificate
+    ```bash
+    sudo certbot --nginx -d chess.wantotrees.xyz
+    ```
+
+3. Verifying certbot auto-renewal
+    ```bash
+    sudo systemctl status certbot.timer
+    ```
 
 ## Note
 

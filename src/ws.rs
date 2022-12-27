@@ -135,3 +135,32 @@ pub async fn start_connection(
     let resp = ws::start(chess_ws, &req, stream)?;
     Ok(resp)
 }
+
+#[cfg(test)]
+mod tests {
+    use actix_web::{test, App, http::header};
+    use super::*;
+
+    #[actix_web::test]
+    async fn ws_connect() {
+        let chess_ws_server = Lobby::default().start();
+        let app = test::init_service(
+            App::new()
+                .app_data(web::Data::new(chess_ws_server.clone()))
+                .service(start_connection)
+        ).await;
+
+        let req = test::TestRequest::default()
+            .uri(&format!("/ws/{}", Uuid::new_v4()))
+            .insert_header((header::HOST, "localhost:7878"))
+            .insert_header((header::CONNECTION, "Upgrade"))
+            .insert_header((header::UPGRADE, "websocket"))
+            .insert_header((header::SEC_WEBSOCKET_VERSION, 13))
+            .insert_header((header::SEC_WEBSOCKET_EXTENSIONS, "permessage-deflate; client_max_window_bits"))
+            .insert_header((header::SEC_WEBSOCKET_KEY, "WGit0IWCAKNhwphfG2Zi2Q=="))
+            .to_request();
+
+        let conn = test::call_service(&app, req).await;
+        assert_eq!(conn.headers().get("upgrade"), Some(&header::HeaderValue::from_static("websocket")));
+    }
+}
